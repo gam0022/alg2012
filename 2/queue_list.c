@@ -7,7 +7,7 @@ typedef struct queue {
 } queue;
 queue *head, *tail;
 
-queue *ensure(void)
+queue *new(void)
 {
 	queue *p = (queue*) malloc(sizeof(queue));
 	if (p == NULL) {
@@ -19,7 +19,7 @@ queue *ensure(void)
 
 void init_queue(void) /* 待ち行列の初期化 */
 {
-	queue *p = ensure();
+	queue *p = new();
 	p->data = 0;
 	p->next = NULL;
 	head = tail = p;
@@ -27,7 +27,7 @@ void init_queue(void) /* 待ち行列の初期化 */
 
 void enqueue(int y)
 {
-	queue *p = ensure();
+	queue *p = new();
 	p->data = y;
 	p->next = NULL;
 	tail->next = p;

@@ -9,7 +9,7 @@ typedef struct cell { /* セルを表す構造体の型定義 */
 cell *head, *tail; /* リストの先頭・末尾を指す */
 
 /* エラーチェック付きのmalloc */
-cell *ensure(void)
+cell *new(void)
 {
 	cell *p = (cell *)malloc(sizeof(cell));
 	if (p == NULL) {
@@ -22,7 +22,7 @@ cell *ensure(void)
 /* リストの初期化 */
 void initlist(void)
 {
-	cell *p = ensure();
+	cell *p = new();
 	p->num = 0;
 	p->next = NULL;
 	head = tail = p;
@@ -32,7 +32,7 @@ void initlist(void)
 /* リストの末尾に整数要素 i を付け加える */
 void append(int i)
 {
-	cell *p = ensure();
+	cell *p = new();
 	p->num = i;
 	tail->next = p;
 	tail = p;
@@ -57,7 +57,7 @@ void insert(cell *p, int i)
 	cell *q;
 	for(q = head; q != NULL; q = q->next) {
 		if (q == p) {
-			cell *r = ensure();
+			cell *r = new();
 			r->num = i;
 			r->next = p->next;
 			p->next = r;
