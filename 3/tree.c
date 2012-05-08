@@ -68,7 +68,7 @@ void show_prefix(node *p)
 {
 	if(p == NULL) return;
 
-	printf("%c", p->record);
+	putchar(p->record);
 	show_prefix(p->left);
 	show_prefix(p->right);
 }
@@ -79,11 +79,11 @@ void show_infix(node *p)
 
 	int f = p->left && p->right;
 
-	if(f) printf("(");
+	if(f) putchar('(');
 	show_infix(p->left);
-	printf("%c", p->record);
+	putchar(p->record);
 	show_infix(p->right);
-	if(f) printf(")");
+	if(f) putchar(')');
 }
 
 void show_infix2(node *p, int parent)
@@ -107,11 +107,11 @@ void show_infix2(node *p, int parent)
 
 	int f = p->left && p->right && self < parent;
 
-	if(f) printf("(");
+	if(f) putchar('(');
 	show_infix2(p->left, self);
-	printf("%c", p->record);
+	putchar(p->record);
 	show_infix2(p->right, self+1);
-	if(f) printf(")");
+	if(f) putchar(')');
 }
 
 int main(void)
