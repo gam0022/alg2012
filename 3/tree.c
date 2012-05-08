@@ -90,7 +90,7 @@ void show_infix2(node *p, int parent)
 {
 	if(p == NULL) return;
 
-	int self;
+	int self;// 演算子の優先度
 	switch (p->record) {
 		case '*':
 		case '/':
@@ -101,11 +101,11 @@ void show_infix2(node *p, int parent)
 			self = 2;
 			break;
 		default:
-			self = 0;
+			self = 6;
 			break;
 	}
 
-	int f = p->left && p->right && self < parent;
+	int f = self < parent;
 
 	if(f) putchar('(');
 	show_infix2(p->left, self);
