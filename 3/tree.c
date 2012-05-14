@@ -25,7 +25,7 @@ node *new(char val)
 
 void push(node *p)
 {
-	if (idx == SIZE) {
+	if (idx == SIZE-1) {
 		perror("over flow!\n");
 		exit(1);
 	}
@@ -44,20 +44,16 @@ node *parse_postfix(char *input)
 {
 	node *p;
 	while(*input != '\0') {
+		p = new(*input);
 		switch (*input) {
 			case '+':
 			case '-':
 			case '*':
 			case '/':
-				p = new(*input);
 				p->right = pop();
 				p->left = pop();
-				push(p);
-				break;
 			default:
-				p = new(*input);
 				push(p);
-				break;
 		}
 		++input;
 	}
@@ -119,18 +115,18 @@ int main(void)
 	char input[256];
 	printf("式を入力してください: ");
 	scanf("%s", input);
-	node *head = parse_postfix(input);
+	node *root = parse_postfix(input);
 
 	printf("中間記法: ");
-	show_infix(head);
+	show_infix(root);
 	printf("\n");
 
 	printf("中間記法2: ");
-	show_infix2(head, 0);
+	show_infix2(root, 0);
 	printf("\n");
 
 	printf("前置記法: ");
-	show_prefix(head);
+	show_prefix(root);
 	printf("\n");
 
 }
