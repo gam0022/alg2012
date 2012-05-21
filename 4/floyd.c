@@ -22,17 +22,19 @@ int Scount=0;	  /* 集合 S の要素数 */
 Weight d[N][N];  /* 重みの累積値を格納する行列 */
 int p[N][N];
 
+// Mを考慮したWeightの比較
 Bool less(Weight a, Weight b)
 {
 	return ( ( a != M && a < b ) || ( a != M && b == M ) );
 }
 
+// Mを考慮したWeightの加算
 Weight append(Weight a, Weight b)
 {
 	return (a == M || b == M) ? M : a+b;
 }
 
-Weight stack[N];
+int stack[N];
 int idx = 0;
 
 void push(int n)
@@ -47,7 +49,7 @@ void push(int n)
 int pop()
 {
 	if(!idx) {
-		printf("Under flow!");
+		perror("Under flow!");
 		exit(1);
 	}
 	return stack[--idx];
@@ -93,15 +95,11 @@ void shortest_path(int m, int n)
 
 int main(int argc, char *argv[])
 {
-	if (argc != 2) {
-		fprintf(stderr, "Usage: %s nodeid\n", argv[0]);
-		exit(1);
-	}
-
 	Floyd();
 
-	int i,p = atoi(argv[1]);
+	int i,j;
 	for(i=0; i<N; ++i)
-		shortest_path(p, i);
+		for(j=0; j<N; ++j)
+			shortest_path(i, j);
 	return 0;
 }

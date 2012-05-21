@@ -14,7 +14,7 @@ typedef int Weight;
 /* 対象のグラフの定義 */
 #define N 6
 int w[N][N] = 
-{{ 0, M,  M, 8, 15, M},
+	{{ 0, M,  M, 8, 15, M},
 	{ 10, 0, 24, M,  8, M},
 	{  M, M,  0, M,  M, 6},
 	{  M, M,  M, 0,  5, M},
@@ -26,11 +26,13 @@ int Scount=0;	  /* 集合 S の要素数 */
 Weight d[N] = {M};  /* 重みの累積値を格納する行列 */
 int from[N] = {0}; // どのノードから辿られたのか格納する行列
 
+// Mを考慮したWeightの比較
 Bool less(Weight a, Weight b)
 {
 	return ( ( a != M && a < b ) || ( a != M && b == M ) );
 }
 
+// Mを考慮したWeightの加算
 Weight append(Weight a, Weight b)
 {
 	return (a == M || b == M) ? M : a+b;
@@ -42,7 +44,13 @@ void add(int p)
 	++Scount;
 }
 
-Weight stack[N];
+Bool remain(void)
+{
+	return (Scount < N);
+}
+
+
+int stack[N];
 int idx = 0;
 
 void push(int n)
@@ -66,11 +74,6 @@ int pop()
 Bool s_remain()
 {
 	return idx;
-}
-
-Bool remain(void)
-{
-	return (Scount < N);
 }
 
 int select_min(void)
