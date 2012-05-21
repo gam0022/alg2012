@@ -49,33 +49,6 @@ Bool remain(void)
 	return (Scount < N);
 }
 
-
-int stack[N];
-int idx = 0;
-
-void push(int n)
-{
-	if(idx == N-1) {
-		perror("Over flow!");
-		exit(1);
-	}
-	stack[idx++] = n;
-}
-
-int pop()
-{
-	if(!idx) {
-		printf("Under flow!");
-		exit(1);
-	}
-	return stack[--idx];
-}
-
-Bool s_remain()
-{
-	return idx;
-}
-
 int select_min(void)
 {
 	int i, p, min = M;
@@ -116,6 +89,13 @@ void Dijkstra(int p)
 	}
 }
 
+void show_path(int i, int p)
+{
+	if(i == p) return;
+	show_path(from[i], p);
+	printf("%d => ", from[i]);
+}
+
 int main(int argc, char *argv[])
 {
 	if (argc != 2) {
@@ -131,11 +111,7 @@ int main(int argc, char *argv[])
 		if(d[i] == M) {
 			printf("there is no path! (%d => %d)\n", p, i);
 		} else {
-			x = i;
-			while(x != p)
-				push(x = from[x]);
-			while(s_remain())
-				printf("%d => ", pop());
+			show_path(i, p);
 			printf("%d (%d)\n", i, d[i]);
 		}
 	}

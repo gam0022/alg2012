@@ -34,32 +34,6 @@ Weight append(Weight a, Weight b)
 	return (a == M || b == M) ? M : a+b;
 }
 
-int stack[N];
-int idx = 0;
-
-void push(int n)
-{
-	if(idx == N-1) {
-		perror("Over flow!");
-		exit(1);
-	}
-	stack[idx++] = n;
-}
-
-int pop()
-{
-	if(!idx) {
-		perror("Under flow!");
-		exit(1);
-	}
-	return stack[--idx];
-}
-
-Bool s_remain()
-{
-	return idx;
-}
-
 void Floyd()
 {
 	int i,j,k,can;
@@ -79,16 +53,19 @@ void Floyd()
 			}
 }
 
+void show_path(int m, int n)
+{
+	if(m == n) return;
+	show_path(m, p[m][n]);
+	printf("%d => ", p[m][n]);
+}
+
 void shortest_path(int m, int n)
 {
-	int x=n;
 	if (d[m][n] == M)
 		printf("there is no path! (%d => %d)\n", m, n);
 	else {
-		while (x != m)
-			push(x = p[m][x]);
-		while(s_remain())
-			printf("%d => ", pop());
+		show_path(m,n);
 		printf("%d (%d)\n", n, d[m][n]);
 	}
 }
