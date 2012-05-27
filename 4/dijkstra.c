@@ -4,7 +4,6 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include "debug.h"
 
 typedef enum {FALSE, TRUE} Bool;
 typedef int Weight;
@@ -24,7 +23,7 @@ int w[N][N] =
 Bool S[N] = {FALSE};		/* 処理済みの頂点の集合 S */
 int Scount=0;	  /* 集合 S の要素数 */
 Weight d[N] = {M};  /* 重みの累積値を格納する行列 */
-int from[N] = {0}; // どのノードから辿られたのか格納する行列
+int from[N] = {0}; // どの頂点から辿られたのか格納する行列
 
 // Mを考慮したWeightの比較
 Bool less(Weight a, Weight b)
@@ -89,16 +88,17 @@ void Dijkstra(int p)
 	}
 }
 
-void show_path(int i, int p)
+// 2頂点mからnの最短経路を再帰的に表示する
+void show_path(int p, int i)
 {
-	if(i == p) return;
-	show_path(from[i], p);
+	if(p == i) return;
+	show_path(p, from[i]);
 	printf("%d => ", from[i]);
 }
 
 int main(int argc, char *argv[])
 {
-	if (argc != 2) {
+	if(argc != 2) {
 		fprintf(stderr, "Usage: %s nodeid\n", argv[0]);
 		exit(1);
 	}
@@ -107,14 +107,13 @@ int main(int argc, char *argv[])
 	Dijkstra(p);
 
 	int i,x;
-	for(i=0; i<N; ++i) {
+	for(i=0; i<N; ++i)
 		if(d[i] == M) {
 			printf("there is no path! (%d => %d)\n", p, i);
 		} else {
-			show_path(i, p);
+			show_path(p, i);
 			printf("%d (%d)\n", i, d[i]);
 		}
-	}
 
 	return 0;
 }

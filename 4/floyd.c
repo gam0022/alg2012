@@ -1,6 +1,5 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include "debug.h"
 
 typedef enum {FALSE, TRUE} Bool;
 typedef int Weight;
@@ -20,7 +19,7 @@ int w[N][N] =
 Bool S[N] = {FALSE};		/* 処理済みの頂点の集合 S */
 int Scount=0;	  /* 集合 S の要素数 */
 Weight d[N][N];  /* 重みの累積値を格納する行列 */
-int p[N][N];
+int p[N][N];// どの頂点から辿られたのか格納する行列
 
 // Mを考慮したWeightの比較
 Bool less(Weight a, Weight b)
@@ -53,6 +52,7 @@ void Floyd()
 			}
 }
 
+// 2頂点mからnの最短経路を再帰的に表示する
 void show_path(int m, int n)
 {
 	if(m == n) return;
@@ -60,6 +60,7 @@ void show_path(int m, int n)
 	printf("%d => ", p[m][n]);
 }
 
+// 2頂点mからnの最短距離とその経路を表示する
 void shortest_path(int m, int n)
 {
 	if (d[m][n] == M)
@@ -70,13 +71,13 @@ void shortest_path(int m, int n)
 	}
 }
 
-int main(int argc, char *argv[])
+int main()
 {
 	Floyd();
 
 	int i,j;
 	for(i=0; i<N; ++i)
 		for(j=0; j<N; ++j)
-			shortest_path(i, j);
+			shortest_path(i,j);
 	return 0;
 }
