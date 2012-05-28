@@ -24,7 +24,7 @@ int p[N][N];// どの頂点から辿られたのか格納する行列
 // Mを考慮したWeightの比較
 Bool less(Weight a, Weight b)
 {
-	return ( ( a != M && a < b ) || ( a != M && b == M ) );
+	return ( a != M && ( a < b || b == M ) );
 }
 
 // Mを考慮したWeightの加算
