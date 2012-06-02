@@ -38,7 +38,7 @@ char *patget(char *s)
 	}
 	strcpy(pat, s);
 
-	if ((next = calloc(strlen(s), sizeof(int))) == NULL) {
+	if ((next = calloc(strlen(s)+1, sizeof(int))) == NULL) {
 		perror("calloc");
 		exit(1);
 	}
