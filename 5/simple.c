@@ -8,7 +8,6 @@
 #include <unistd.h>
 
 int Ncomp = 0; /* 比較回数をカウントする大域変数 */
-int *next;
 #define TRACE
 
 int getFileSize(char *fname)
@@ -37,11 +36,6 @@ char *patget(char *s)
 		exit(1);
 	}
 	strcpy(pat, s);
-
-	if ((next = calloc(strlen(s)+1, sizeof(int))) == NULL) {
-		perror("calloc");
-		exit(1);
-	}
 
 	return pat;
 }
@@ -81,35 +75,21 @@ int compare(char a, char b)
 	return a == b;
 }
 
-// nextを求める
-void compnxt(char *pat, int plen)
-{
-	int i = 0, s = -1;
-	next[0] = -1;
-	while(i < plen) {
-		while(s>-1 && pat[i] != pat[s])
-			s = next[s];
-
-		if(pat[++i] == pat[++s])
-			next[i] = next[s];
-		else
-			next[i] = s;
-	}
-}
-
-// KNP照合
-int kmp_search(char *text, int tlen, char *pat, int plen)
+/* 単純照合 */
+int simple_search(char *text, int tlen, char *pat, int plen)
 {
 	int i=0, j=0;// i:patのindex, j:textのindex
 	while(j < tlen) {
 #ifdef TRACE
 		printf("i:%d j:%d\n", i, j);
 #endif
-		while(i > -1 && !compare(pat[i], text[j]))
-			i = next[i];
-
-		if(i == plen-1) return j - plen + 1;
-		else {++i; ++j;}
+		if(compare(pat[i], text[j])) {
+			if(i == plen-1) return j - plen + 1;
+			else {++i; ++j;}
+		} else {
+			j = j - i + 1;
+			i = 0;
+		}
 	}
 	return -1;
 }
@@ -136,20 +116,8 @@ int main(int argc, char *argv[])
 	text = txtget(argv[2]);
 	tlen = strlen(text); /* テキストの文字数を求める */
 
-	/* KMP照合の関数を呼び出す */
-	compnxt(pat, plen);
-
-	// nextを表示する
-#ifdef TRACE
-	int i;
-	printf("next :");
-	for(i=0; i<plen; i++)
-		printf("%d ", next[i]);
-	printf("\n");
-#endif
-
 	/* 単純照合の関数を呼び出す */
-	pos = kmp_search(text, tlen, pat, plen);
+	pos = simple_search(text, tlen, pat, plen);
 
 	if (pos >= 0)
 		printf("Found at %d\n", pos);
@@ -159,7 +127,6 @@ int main(int argc, char *argv[])
 
 	free(pat); /* patのメモリ領域を解放 */
 	free(text); /* textのメモリ領域を解放 */
-	free(next);// nextのメモリを解放
 
 	return 0;
 }
